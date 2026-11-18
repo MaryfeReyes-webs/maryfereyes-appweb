@@ -1,0 +1,15 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Solo usuarios autenticados del consultorio pueden leer y escribir.
+    function isStaff() {
+      return request.auth != null
+        && request.auth.token.email.matches('.*@maryfereyes[.]app$');
+    }
+
+    match /{collection}/{docId} {
+      allow read, write: if isStaff()
+        && collection in ['patients', 'services', 'expenses', 'catalog', 'config'];
+    }
+  }
+}
