@@ -34,7 +34,25 @@ node scripts/demo-data.mjs clean   # borra solo los datos demo (demo: true) ante
 
 Los teléfonos demo son falsos (`000 000 0xx`); edita un paciente con tu número para probar el envío por WhatsApp.
 
-## Publicar (Firebase Hosting)
+## Publicar en Vercel (recomendado)
+
+La configuración ya está en [`vercel.json`](vercel.json): build de Vite, reescritura de rutas a `index.html`
+(para que funcionen enlaces como `/agenda` o `/pacientes/…` al recargar), caché larga para `/assets` y cabeceras de seguridad.
+
+1. Sube los cambios a GitHub (`git push`).
+2. En [vercel.com](https://vercel.com) → **Add New… → Project** → importa el repositorio `maryfereyes-appweb`.
+3. Vercel detecta todo desde `vercel.json`; **no hace falta configurar variables de entorno** (la config web de Firebase es pública
+   y la seguridad la dan Authentication + `firestore.rules`). Pulsa **Deploy**.
+4. Cada `git push` a `main` vuelve a publicar automáticamente; las ramas generan URLs de vista previa.
+
+Después del primer despliegue (opcional, recomendado):
+
+- **Restringir la API key** a tu dominio: Google Cloud Console → APIs y servicios → Credenciales → la clave "Browser key" →
+  *Restricciones de aplicaciones: sitios web* → agrega `https://<tu-proyecto>.vercel.app/*` (y `http://localhost:5173/*` para desarrollo).
+- **Quitar los datos de prueba** antes de que la doctora empiece a usarla: `node scripts/demo-data.mjs clean`.
+- En el celular: abrir la URL → "Agregar a pantalla de inicio" para usarla como app.
+
+## Publicar (Firebase Hosting, alternativa)
 
 ```sh
 firebase login            # con la cuenta dueña de maryfereyes-appweb
