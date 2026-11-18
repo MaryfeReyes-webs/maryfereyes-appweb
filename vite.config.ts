@@ -10,6 +10,10 @@ export default defineConfig({
     vue(),
     vueDevTools(),
   ],
+  build: {
+    // Firebase + Chart.js forman un bloque grande (≈220 kB gzip); es esperado.
+    chunkSizeWarningLimit: 900,
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
